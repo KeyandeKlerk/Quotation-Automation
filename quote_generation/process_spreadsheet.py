@@ -13,7 +13,8 @@ def main():
     global priceList1, curr_dir
     curr_dir = os.getcwd()
     priceList1 = openpyxl.load_workbook(
-        f'{curr_dir}\\spreadsheets\\Template.xlsx', data_only=True)
+        f"{curr_dir}\\spreadsheets\\Template.xlsx", data_only=True
+    )
 
     # Function to process each individual sheet
 
@@ -21,12 +22,13 @@ def main():
     process_category_b(priceList1)
     process_category_c(priceList1)
 
+
 # Function to process Conventional Products Sheet
 
 
 def process_category_a(priceList1):
 
-    activeSheet = priceList1['CategoryA']
+    activeSheet = priceList1["CategoryA"]
     cells = []
     rows = []
 
@@ -39,14 +41,15 @@ def process_category_a(priceList1):
         rows.append(cells)
         cells = []
 
-    save_to_file(rows, 'categoryA.json')
+    save_to_file(rows, "categoryA.json")
+
 
 # Function to process Specialist Products Sheet
 
 
 def process_category_b(priceList1):
 
-    activeSheet = priceList1['CategoryB']
+    activeSheet = priceList1["CategoryB"]
     cells = []
     rows = []
 
@@ -59,14 +62,15 @@ def process_category_b(priceList1):
         rows.append(cells)
         cells = []
 
-    save_to_file(rows, 'categoryB.json')
+    save_to_file(rows, "categoryB.json")
+
 
 # Function to process Intelligent Equipment Sheet
 
 
 def process_category_c(priceList1):
 
-    activeSheet = priceList1['CategoryC']
+    activeSheet = priceList1["CategoryC"]
     cells = []
     rows = []
 
@@ -79,15 +83,16 @@ def process_category_c(priceList1):
         rows.append(cells)
         cells = []
 
-    save_to_file(rows, 'categoryC.json')
+    save_to_file(rows, "categoryC.json")
+
 
 # Function to save json data to file
 
 
 def save_to_file(json_data, filename):
 
-    json_filename = curr_dir + '\\json\\' + filename
+    json_filename = curr_dir + "\\json\\" + filename
 
-    with open(json_filename, 'w') as outfile:
+    with open(json_filename, "w") as outfile:
 
         json.dump(json_data, outfile)
