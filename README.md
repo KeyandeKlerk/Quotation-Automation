@@ -20,6 +20,11 @@ Run main.py to run the program directly
 
 ## TO DO
 
-- if outsourced is true put outsourced in brackets
 - search through dropdown
+- List all items with same id together
+
+## Bugs
+
+
+
 

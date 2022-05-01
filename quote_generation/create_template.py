@@ -1,7 +1,7 @@
 # File to create the basic template of the quote
 
 import process_spreadsheet
-import json
+import random
 import os
 
 from openpyxl import Workbook
@@ -13,9 +13,7 @@ from datetime import datetime
 
 
 def init():
-    global workbook, filename, sheet, curr_dir
-    curr_dir = os.getcwd()
-    filename = curr_dir + "\\generated quotes\\generated_quote.xlsx"
+    global workbook, sheet
 
     workbook = Workbook()
     sheet = workbook.active
@@ -24,16 +22,13 @@ def init():
     sheet.column_dimensions["B"].width = 25
     sheet.column_dimensions["C"].width = 5
 
-    process_spreadsheet.main()
-
 
 # Function to load json
 
 
-def insert_data_from_json(json_data):
+def insert_data_from_list(json_data):
     counter = 1
 
-    json_data = json.loads(json_data)
     for products in json_data:
         append_row([counter, products[0], "", products[1], products[2]])
         row_num = sheet.max_row
@@ -74,6 +69,8 @@ def set_border(cell_range):
 
 def template_head(client_name, requested_by, area_on_site, contact_info, work):
 
+    init()
+
     current_date = datetime.now()
     current_date = current_date.strftime("%Y-%m-%d")
 
@@ -105,11 +102,10 @@ def template_head(client_name, requested_by, area_on_site, contact_info, work):
 
 
 def create_category_a(json_data, markup):
-
     append_row(["A"])
 
     # Loop to populate category A
-    insert_data_from_json(json_data)
+    insert_data_from_list(json_data)
     current_rows_used = sheet.max_row
     append_row([""])
 
@@ -146,7 +142,7 @@ def create_category_b(json_data, markup):
     append_row(["B"])
     rows_before_population = sheet.max_row
     # Loop to populate category A
-    insert_data_from_json(json_data)
+    insert_data_from_list(json_data)
     current_rows_used = sheet.max_row
     append_row([""])
 
@@ -185,7 +181,7 @@ def create_category_c(json_data, markup):
     append_row(["C"])
     rows_before_population = sheet.max_row
     # Loop to populate category A
-    insert_data_from_json(json_data)
+    insert_data_from_list(json_data)
     current_rows_used = sheet.max_row
 
     append_row([""])
@@ -221,8 +217,10 @@ def create_category_c(json_data, markup):
 # Function that creates final totals and notes
 
 
-def final_totals(notes=""):
+def final_totals(quote_name, notes=""):
 
+    curr_dir = os.getcwd()
+    filename = curr_dir + "\\generated quotes\\" + quote_name + ".xlsx"
     current_rows_used = sheet.max_row
 
     append_row(["", "Total Cost Excl. VAT"])
@@ -264,3 +262,4 @@ def final_totals(notes=""):
     merge_cells("A" + str(current_rows_used + 7) + ":G" + str(current_rows_used + 13))
 
     workbook.save(filename)
+    workbook.close()
