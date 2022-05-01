@@ -25,6 +25,6 @@ Run main.py to run the program directly
 
 ## Bugs
 
-
+- "Store Unit as Number Value not Text" error if quantity is a float (0.5)
 
 
