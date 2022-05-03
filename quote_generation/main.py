@@ -466,6 +466,7 @@ def create_quote(
                 combobox_c,
                 quote_name,
             ),
+            messagebox.showinfo("Quote Created", "Quote Successfully Generated")
 
 
 # Function that generates the GUI
