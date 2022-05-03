@@ -4,7 +4,7 @@ import json
 import os
 
 import tkinter as tk
-from tkinter import Entry, Label, ttk, Button, Listbox, Text, END
+from tkinter import Entry, Label, ttk, Button, Listbox, Text, messagebox, END
 
 import process_spreadsheet
 from create_template import (
@@ -41,6 +41,9 @@ def clear_variables(
     listbox_a,
     listbox_b,
     listbox_c,
+    combobox_a,
+    combobox_b,
+    combobox_c,
     quote_name,
 ):
 
@@ -60,6 +63,10 @@ def clear_variables(
     category_b_quote.clear()
     category_c_quote.clear()
 
+    combobox_a.delete(0, END)
+    combobox_b.delete(0, END)
+    combobox_c.delete(0, END)
+
     listbox_a.delete(0, END)
     listbox_b.delete(0, END)
     listbox_c.delete(0, END)
@@ -72,17 +79,110 @@ def clear_variables(
 
 def merge_duplicates(items):
     # Check if item already exists in list and if so just add quantity to it
-    d = {}
+    dictionary = {}
     for x in items:
-        if x[0] in d.keys():
-            d[x[0]] = (x[1], d[x[0]][1] + x[2], x[3])
+        if x[0] in dictionary.keys():
+            dictionary[x[0]] = (x[1], dictionary[x[0]][1] + x[2], x[3])
         else:
-            d[x[0]] = (x[1], x[2], x[3])
+            dictionary[x[0]] = (x[1], x[2], x[3])
     ans = []
-    for k, v in d.items():
+    for k, v in dictionary.items():
         ans.append([k, v[0], v[1], v[2]])
 
     return ans
+
+
+# Function to check if mark up is valid
+
+
+def is_float(number) -> bool:
+    try:
+        float(number)
+        return True
+    except ValueError:
+        return False
+
+
+# Function to validate header text fields
+
+
+def validate_header(
+    client_name,
+    contact_info,
+    requested_by,
+    area_on_site,
+    work,
+    markup_a,
+    markup_b,
+    markup_c,
+    quote_name,
+):
+
+    if client_name == "":
+        messagebox.showerror("Form Error", "Please enter a name for the client")
+        return False
+
+    elif quote_name == "":
+        messagebox.showerror("Form Error", "Please enter a quote name")
+        return False
+
+    elif contact_info == "":
+        messagebox.showerror("Form Error", "Please enter a contact info for the client")
+        return False
+
+    elif requested_by == "":
+        messagebox.showerror("Form Error", "Please enter a who requested quote")
+        return False
+
+    elif area_on_site == "":
+        messagebox.showerror("Form Error", "Please enter the area on site")
+        return False
+
+    elif work == "":
+        messagebox.showerror("Form Error", "Please enter the work done")
+        return False
+
+    elif is_float(markup_a) == False:
+        messagebox.showerror(
+            "Form Error", "Please enter a mark up A value (without the percentage sign)"
+        )
+        return False
+
+    elif is_float(markup_b) == False:
+        messagebox.showerror(
+            "Form Error", "Please enter a mark up B value (without the percentage sign)"
+        )
+        return False
+
+    elif is_float(markup_c) == False:
+        messagebox.showerror(
+            "Form Error", "Please enter a mark up C value (without the percentage sign)"
+        )
+        return False
+
+    else:
+        return True
+
+
+# Function to clear all variable values
+
+
+def validate_categories(quoted_itemsA, quoted_itemsB, quoted_itemsC):
+
+    if not quoted_itemsA:
+        messagebox.showerror("Form Error", "Please enter items in Category A")
+        return False
+
+    elif not quoted_itemsB:
+        messagebox.showerror("Form Error", "Please enter items for Category B")
+        return False
+
+    elif not quoted_itemsC:
+        messagebox.showerror("Form Error", "Please enter items for Category C")
+        return False
+
+    else:
+        return True
 
 
 # Function to insert value into listBox A
@@ -160,19 +260,23 @@ def addToCategoryA(item, quantity_a):
     product_id = item["Description"][0]
     quantity = item["Quantity"]
 
-    list_data_categoryA = curr_dir + "\\json\\categoryA.json"
-    fob = open(
-        list_data_categoryA,
-    )
-    data = json.load(fob)
+    if quantity == "":
+        messagebox.showerror("Invalid Entry", "Please enter a valid quantity")
 
-    for items in data:
-        if product_id == items[0]:
-            items = [int(items[0]), items[1], float(quantity), items[2]]
-            category_a_quote.append(items)
+    else:
+        list_data_categoryA = curr_dir + "\\json\\categoryA.json"
+        fob = open(
+            list_data_categoryA,
+        )
+        data = json.load(fob)
 
-    category_a_quote = merge_duplicates(category_a_quote)
-    insert_into_listbox_a(category_a_quote, quantity_a)
+        for items in data:
+            if product_id == items[0]:
+                items = [int(items[0]), items[1], float(quantity), items[2]]
+                category_a_quote.append(items)
+
+        category_a_quote = merge_duplicates(category_a_quote)
+        insert_into_listbox_a(category_a_quote, quantity_a)
 
 
 # Function to add items from Category B to list
@@ -184,19 +288,23 @@ def addToCategoryB(item, quantity_b):
     product_id = item["Description"][0]
     quantity = item["Quantity"]
 
-    list_data_categoryB = curr_dir + "\\json\\categoryB.json"
-    fob = open(
-        list_data_categoryB,
-    )
-    data = json.load(fob)
+    if quantity == "":
+        messagebox.showerror("Invalid Entry", "Please enter a valid quantity")
 
-    for items in data:
-        if product_id == items[0]:
-            items = [int(items[0]), items[1], float(quantity), items[2]]
-            category_b_quote.append(items)
+    else:
+        list_data_categoryB = curr_dir + "\\json\\categoryB.json"
+        fob = open(
+            list_data_categoryB,
+        )
+        data = json.load(fob)
 
-    category_b_quote = merge_duplicates(category_b_quote)
-    insert_into_listbox_b(category_b_quote, quantity_b)
+        for items in data:
+            if product_id == items[0]:
+                items = [int(items[0]), items[1], float(quantity), items[2]]
+                category_b_quote.append(items)
+
+        category_b_quote = merge_duplicates(category_b_quote)
+        insert_into_listbox_b(category_b_quote, quantity_b)
 
 
 # Function to add items from Category C to list
@@ -208,28 +316,32 @@ def addToCategoryC(item, quantity_c):
     product_id = item["Description"][0]
     quantity = item["Quantity"]
 
-    list_data_categoryC = curr_dir + "\\json\\categoryC.json"
-    fob = open(
-        list_data_categoryC,
-    )
-    data = json.load(fob)
+    if quantity == "":
+        messagebox.showerror("Invalid Entry", "Please enter a valid quantity")
 
-    for items in data:
-        if product_id == items[0]:
-            if items[3] == "Yes":
-                items = [
-                    int(items[0]),
-                    items[1] + " (Outsourced)",
-                    float(quantity),
-                    items[2],
-                ]
-            else:
-                items = [int(items[0]), items[1], float(quantity), items[2]]
+    else:
+        list_data_categoryC = curr_dir + "\\json\\categoryC.json"
+        fob = open(
+            list_data_categoryC,
+        )
+        data = json.load(fob)
 
-            category_c_quote.append(items)
+        for items in data:
+            if product_id == items[0]:
+                if items[3] == "Yes":
+                    items = [
+                        int(items[0]),
+                        items[1] + " (Outsourced)",
+                        float(quantity),
+                        items[2],
+                    ]
+                else:
+                    items = [int(items[0]), items[1], float(quantity), items[2]]
 
-    category_c_quote = merge_duplicates(category_c_quote)
-    insert_into_listbox_c(category_c_quote, quantity_c)
+                category_c_quote.append(items)
+
+        category_c_quote = merge_duplicates(category_c_quote)
+        insert_into_listbox_c(category_c_quote, quantity_c)
 
 
 # Function that gets items for Category A
@@ -281,6 +393,79 @@ def getCategoryC():
         categoryC_items.append(items[0] + ": " + items[1])
 
     return categoryC_items
+
+
+def create_quote(
+    client_name,
+    contact_info,
+    requested_by,
+    area_on_site,
+    work,
+    categoryA_markup,
+    categoryB_markup,
+    categoryC_markup,
+    notes,
+    category_a_quote,
+    category_b_quote,
+    category_c_quote,
+    list_box_a,
+    list_box_b,
+    list_box_c,
+    combobox_a,
+    combobox_b,
+    combobox_c,
+    quote_name,
+):
+    if (
+        validate_header(
+            client_name.get(),
+            contact_info.get(),
+            requested_by.get(),
+            area_on_site.get(),
+            work.get(),
+            categoryA_markup.get(),
+            categoryB_markup.get(),
+            categoryC_markup.get(),
+            quote_name.get(),
+        )
+        == True
+    ):
+        if (
+            validate_categories(category_a_quote, category_b_quote, category_c_quote)
+            == True
+        ):
+            template_head(
+                client_name.get(),
+                contact_info.get(),
+                requested_by.get(),
+                area_on_site.get(),
+                work.get(),
+            ),
+            create_category_a(category_a_quote, categoryA_markup.get() + "%"),
+            create_category_b(category_b_quote, categoryB_markup.get() + "%"),
+            create_category_c(category_c_quote, categoryC_markup.get() + "%"),
+            final_totals(quote_name.get(), notes.get("1.0", "end-1c")),
+            clear_variables(
+                client_name,
+                contact_info,
+                requested_by,
+                area_on_site,
+                work,
+                categoryA_markup,
+                categoryB_markup,
+                categoryC_markup,
+                notes,
+                category_a_quote,
+                category_b_quote,
+                category_c_quote,
+                list_box_a,
+                list_box_b,
+                list_box_c,
+                combobox_a,
+                combobox_b,
+                combobox_c,
+                quote_name,
+            ),
 
 
 # Function that generates the GUI
@@ -496,34 +681,26 @@ def createGUI():
         fg="blue",
         command=(
             lambda: [
-                template_head(
-                    client_name.get(),
-                    contact_info.get(),
-                    requested_by.get(),
-                    area_on_site.get(),
-                    work.get(),
-                ),
-                create_category_a(category_a_quote, categoryA_markup.get() + "%"),
-                create_category_b(category_b_quote, categoryB_markup.get() + "%"),
-                create_category_c(category_c_quote, categoryC_markup.get() + "%"),
-                final_totals(quote_name.get(), notes.get("1.0", "end-1c")),
-                clear_variables(
-                    client_name,
-                    contact_info,
-                    requested_by,
-                    area_on_site,
-                    work,
-                    categoryA_markup,
-                    categoryB_markup,
-                    categoryC_markup,
-                    notes,
-                    category_a_quote,
-                    category_b_quote,
-                    category_c_quote,
-                    list_box_a,
-                    list_box_b,
-                    list_box_c,
-                    quote_name,
+                create_quote(
+                    client_name=client_name,
+                    contact_info=contact_info,
+                    requested_by=requested_by,
+                    area_on_site=area_on_site,
+                    work=work,
+                    categoryA_markup=categoryA_markup,
+                    categoryB_markup=categoryB_markup,
+                    categoryC_markup=categoryC_markup,
+                    notes=notes,
+                    category_a_quote=category_a_quote,
+                    category_b_quote=category_b_quote,
+                    category_c_quote=category_c_quote,
+                    list_box_a=list_box_a,
+                    list_box_b=list_box_b,
+                    list_box_c=list_box_c,
+                    combobox_a=cb1,
+                    combobox_b=cb2,
+                    combobox_c=cb3,
+                    quote_name=quote_name,
                 ),
             ]
         ),

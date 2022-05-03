@@ -21,7 +21,6 @@ Run main.py to run the program directly
 ## TO DO
 
 - search through dropdown
-- change combobox selection index to -1 to have no option selected
 
 ## Bugs
 
