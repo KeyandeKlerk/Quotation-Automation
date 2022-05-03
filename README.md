@@ -21,10 +21,11 @@ Run main.py to run the program directly
 ## TO DO
 
 - search through dropdown
-- List all items with same id together
+- change combobox selection index to -1 to have no option selected
 
 ## Bugs
 
-- "Store Unit as Number Value not Text" error if quantity is a float (0.5)
+- Check if adding percentages as float might break formulae
+
 
 
