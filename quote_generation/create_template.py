@@ -30,7 +30,7 @@ def insert_data_from_list(json_data):
     counter = 1
 
     for products in json_data:
-        append_row([counter, products[0], "", products[1], products[2]])
+        append_row([counter, products[1], "", products[2], products[3]])
         row_num = sheet.max_row
         merge_cells("B" + str(row_num) + ":C" + str(row_num))
         sheet["F" + str(row_num)] = "=D" + str(row_num) + "*E" + str(row_num)

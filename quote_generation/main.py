@@ -21,6 +21,7 @@ category_a_quote = []
 category_b_quote = []
 category_c_quote = []
 
+
 # Function to clear all variable values
 
 
@@ -30,9 +31,6 @@ def clear_variables(
     requested_by,
     area_on_site,
     work,
-    jsonA,
-    jsonB,
-    jsonC,
     markup_a,
     markup_b,
     markup_c,
@@ -56,10 +54,6 @@ def clear_variables(
     markup_b.delete(0, "end")
     markup_c.delete(0, "end")
 
-    jsonA.clear()
-    jsonB.clear()
-    jsonC.clear()
-
     notes.delete("1.0", "end")
 
     category_a_quote.clear()
@@ -73,13 +67,32 @@ def clear_variables(
     quote_name.delete(0, "end")
 
 
+# Function to merge lists with identical ID's
+
+
+def merge_duplicates(items):
+    # Check if item already exists in list and if so just add quantity to it
+    d = {}
+    for x in items:
+        if x[0] in d.keys():
+            d[x[0]] = (x[1], d[x[0]][1] + x[2], x[3])
+        else:
+            d[x[0]] = (x[1], x[2], x[3])
+    ans = []
+    for k, v in d.items():
+        ans.append([k, v[0], v[1], v[2]])
+
+    return ans
+
+
 # Function to insert value into listBox A
 
 
 def insert_into_listbox_a(items, quantity_a):
     list_box_a.delete(0, END)
+
     for item in items:
-        item_row = item[0] + item[1]
+        item_row = str(item[0]) + ": " + item[1] + "   " + str(item[2])
         list_box_a.insert(END, item_row)
 
     quantity_a.delete(0, END)
@@ -90,8 +103,9 @@ def insert_into_listbox_a(items, quantity_a):
 
 def insert_into_listbox_b(items, quantity_b):
     list_box_b.delete(0, END)
+
     for item in items:
-        item_row = item[0] + item[1]
+        item_row = str(item[0]) + ": " + item[1] + "   " + str(item[2])
         list_box_b.insert(END, item_row)
 
     quantity_b.delete(0, END)
@@ -102,8 +116,9 @@ def insert_into_listbox_b(items, quantity_b):
 
 def insert_into_listbox_c(items, quantity_c):
     list_box_c.delete(0, END)
+
     for item in items:
-        item_row = item[0] + item[1]
+        item_row = str(item[0]) + ": " + item[1] + "   " + str(item[2])
         list_box_c.insert(END, item_row)
 
     quantity_c.delete(0, END)
@@ -112,50 +127,38 @@ def insert_into_listbox_c(items, quantity_c):
 # Function to remove value from listBox A
 
 
-def remove_from_listbox_a(list_data):
-    global jsonA
-    jsonA = []
+def remove_from_listbox_a(category_a_quote):
     for i in list_box_a.curselection():
         list_box_a.delete(i)
         category_a_quote.pop(i)
-
-    jsonA = category_a_quote
 
 
 # Function to remove value from listBox B
 
 
-def remove_from_listbox_b(list_data):
-    global jsonB
-    jsonB = []
+def remove_from_listbox_b(category_b_quote):
     for i in list_box_b.curselection():
         list_box_b.delete(i)
         category_b_quote.pop(i)
-
-    jsonB = category_b_quote
 
 
 # Function to remove value from listBox C
 
 
-def remove_from_listbox_c(list_data):
-    global jsonC
-    jsonC = []
+def remove_from_listbox_c(category_c_quote):
     for i in list_box_c.curselection():
         list_box_c.delete(i)
         category_c_quote.pop(i)
-
-    jsonC = category_c_quote
 
 
 # Function to add items from Category A to list
 
 
 def addToCategoryA(item, quantity_a):
-    global jsonA
-    jsonA = []
+    global category_a_quote
+
     product_id = item["Description"][0]
-    quanitity = item["Quantity"]
+    quantity = item["Quantity"]
 
     list_data_categoryA = curr_dir + "\\json\\categoryA.json"
     fob = open(
@@ -165,11 +168,10 @@ def addToCategoryA(item, quantity_a):
 
     for items in data:
         if product_id == items[0]:
-
-            items = [items[1], quanitity, items[2]]
+            items = [int(items[0]), items[1], float(quantity), items[2]]
             category_a_quote.append(items)
 
-    jsonA = category_a_quote
+    category_a_quote = merge_duplicates(category_a_quote)
     insert_into_listbox_a(category_a_quote, quantity_a)
 
 
@@ -177,10 +179,10 @@ def addToCategoryA(item, quantity_a):
 
 
 def addToCategoryB(item, quantity_b):
-    global jsonB
-    jsonB = []
+    global category_b_quote
+
     product_id = item["Description"][0]
-    quanitity = item["Quantity"]
+    quantity = item["Quantity"]
 
     list_data_categoryB = curr_dir + "\\json\\categoryB.json"
     fob = open(
@@ -190,10 +192,10 @@ def addToCategoryB(item, quantity_b):
 
     for items in data:
         if product_id == items[0]:
-            items = [items[1], quanitity, items[2]]
+            items = [int(items[0]), items[1], float(quantity), items[2]]
             category_b_quote.append(items)
 
-    jsonB = category_b_quote
+    category_b_quote = merge_duplicates(category_b_quote)
     insert_into_listbox_b(category_b_quote, quantity_b)
 
 
@@ -201,10 +203,10 @@ def addToCategoryB(item, quantity_b):
 
 
 def addToCategoryC(item, quantity_c):
-    global jsonC
-    jsonC = []
+    global category_c_quote
+
     product_id = item["Description"][0]
-    quanitity = item["Quantity"]
+    quantity = item["Quantity"]
 
     list_data_categoryC = curr_dir + "\\json\\categoryC.json"
     fob = open(
@@ -216,17 +218,17 @@ def addToCategoryC(item, quantity_c):
         if product_id == items[0]:
             if items[3] == "Yes":
                 items = [
-                    "".join((items[1] + " (Outsourced)")),
-                    quanitity,
+                    int(items[0]),
+                    items[1] + " (Outsourced)",
+                    float(quantity),
                     items[2],
-                    items[3],
                 ]
             else:
-                items = [items[1], quanitity, items[2], items[3]]
+                items = [int(items[0]), items[1], float(quantity), items[2]]
 
             category_c_quote.append(items)
 
-    jsonC = category_c_quote
+    category_c_quote = merge_duplicates(category_c_quote)
     insert_into_listbox_c(category_c_quote, quantity_c)
 
 
@@ -372,10 +374,12 @@ def createGUI():
         text="Add Item",
         fg="blue",
         command=(
-            lambda: addToCategoryA(
-                {"Description": cb1.get(), "Quantity": categoryAQuantity.get()},
-                categoryAQuantity,
-            )
+            lambda: [
+                addToCategoryA(
+                    {"Description": cb1.get(), "Quantity": categoryAQuantity.get()},
+                    categoryAQuantity,
+                ),
+            ]
         ),
     )
     btnAddCategoryA.grid(row=8, column=3)
@@ -387,7 +391,7 @@ def createGUI():
         window,
         text="Remove Item",
         fg="blue",
-        command=(lambda: remove_from_listbox_a(jsonA)),
+        command=(lambda: [remove_from_listbox_a(category_a_quote)]),
     )
     btn_remove_from_listbox_a.grid(row=9, column=3)
 
@@ -431,7 +435,7 @@ def createGUI():
         window,
         text="Remove Item",
         fg="blue",
-        command=(lambda: remove_from_listbox_b(jsonB)),
+        command=(lambda: remove_from_listbox_b(category_b_quote)),
     )
     btn_remove_from_listbox_b.grid(row=13, column=3)
 
@@ -475,7 +479,7 @@ def createGUI():
         window,
         text="Remove Item",
         fg="blue",
-        command=(lambda: remove_from_listbox_c(jsonC)),
+        command=(lambda: remove_from_listbox_c(category_c_quote)),
     )
     btn_remove_from_listbox_c.grid(row=17, column=3)
 
@@ -499,9 +503,9 @@ def createGUI():
                     area_on_site.get(),
                     work.get(),
                 ),
-                create_category_a(jsonA, categoryA_markup.get() + "%"),
-                create_category_b(jsonB, categoryB_markup.get() + "%"),
-                create_category_c(jsonC, categoryC_markup.get() + "%"),
+                create_category_a(category_a_quote, categoryA_markup.get() + "%"),
+                create_category_b(category_b_quote, categoryB_markup.get() + "%"),
+                create_category_c(category_c_quote, categoryC_markup.get() + "%"),
                 final_totals(quote_name.get(), notes.get("1.0", "end-1c")),
                 clear_variables(
                     client_name,
@@ -509,9 +513,6 @@ def createGUI():
                     requested_by,
                     area_on_site,
                     work,
-                    jsonA,
-                    jsonB,
-                    jsonC,
                     categoryA_markup,
                     categoryB_markup,
                     categoryC_markup,
