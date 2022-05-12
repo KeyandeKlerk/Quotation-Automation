@@ -20,11 +20,33 @@ Run main.py to run the program directly
 
 ## TO DO
 
-- search through dropdown
+- search through dropdown columns
 
 ## Bugs
 
 - Check if adding percentages as float might break formulae
+- template processing error
+- get all values from spreadsheet as float values
+
+
+## Columns
+
+
+### Column A
+
+
+- Supplier
+- Product Code
+- System Type
+
+### Category B
+
+
+- Supplier
+- Product Code
+- Outsourced
+
+
 
 
 

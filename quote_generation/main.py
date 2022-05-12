@@ -1,6 +1,7 @@
 # File to run the quote generation system
 
 import json
+from math import prod
 import os
 
 import tkinter as tk
@@ -257,22 +258,24 @@ def remove_from_listbox_c(category_c_quote):
 def addToCategoryA(item, quantity_a):
     global category_a_quote
 
-    product_id = item["Description"][0]
+    description = item["Description"]
     quantity = item["Quantity"]
+    product_id = description.split(':')[0]
 
     if quantity == "":
         messagebox.showerror("Invalid Entry", "Please enter a valid quantity")
 
     else:
-        list_data_categoryA = curr_dir + "\\json\\categoryA.json"
+        list_data_categoryA = curr_dir + "/json/categoryA.json"
         fob = open(
             list_data_categoryA,
         )
         data = json.load(fob)
-
         for items in data:
             if product_id == items[0]:
-                items = [int(items[0]), items[1], float(quantity), items[2]]
+                print(items)
+                items = [int(items[0]), items[1], float(quantity), float(items[2])]
+
                 category_a_quote.append(items)
 
         category_a_quote = merge_duplicates(category_a_quote)
@@ -285,14 +288,16 @@ def addToCategoryA(item, quantity_a):
 def addToCategoryB(item, quantity_b):
     global category_b_quote
 
-    product_id = item["Description"][0]
+    description = item["Description"]
     quantity = item["Quantity"]
+
+    product_id = description.split(':')[0]
 
     if quantity == "":
         messagebox.showerror("Invalid Entry", "Please enter a valid quantity")
 
     else:
-        list_data_categoryB = curr_dir + "\\json\\categoryB.json"
+        list_data_categoryB = curr_dir + "/json/categoryB.json"
         fob = open(
             list_data_categoryB,
         )
@@ -313,14 +318,16 @@ def addToCategoryB(item, quantity_b):
 def addToCategoryC(item, quantity_c):
     global category_c_quote
 
-    product_id = item["Description"][0]
+    description = item["Description"]
     quantity = item["Quantity"]
+
+    product_id = description.split(':')[0]
 
     if quantity == "":
         messagebox.showerror("Invalid Entry", "Please enter a valid quantity")
 
     else:
-        list_data_categoryC = curr_dir + "\\json\\categoryC.json"
+        list_data_categoryC = curr_dir + "/json/categoryC.json"
         fob = open(
             list_data_categoryC,
         )
@@ -348,7 +355,7 @@ def addToCategoryC(item, quantity_c):
 
 
 def getCategoryA():
-    list_data_categoryA = curr_dir + "\\json\\categoryA.json"
+    list_data_categoryA = curr_dir + "/json/categoryA.json"
     fob = open(
         list_data_categoryA,
     )
@@ -365,7 +372,7 @@ def getCategoryA():
 
 
 def getCategoryB():
-    list_data_categoryB = curr_dir + "\\json\\categoryB.json"
+    list_data_categoryB = curr_dir + "/json/categoryB.json"
     fob = open(
         list_data_categoryB,
     )
@@ -382,7 +389,7 @@ def getCategoryB():
 
 
 def getCategoryC():
-    list_data_categoryC = curr_dir + "\\json\\categoryC.json"
+    list_data_categoryC = curr_dir + "/json/categoryC.json"
     fob = open(
         list_data_categoryC,
     )

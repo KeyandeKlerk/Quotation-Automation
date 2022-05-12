@@ -13,7 +13,7 @@ def main():
     global priceList1, curr_dir
     curr_dir = os.getcwd()
     priceList1 = openpyxl.load_workbook(
-        f"{curr_dir}\\spreadsheets\\Template.xlsx", data_only=True
+        f"{curr_dir}/spreadsheets/Template.xlsx", data_only=True
     )
 
     # Function to process each individual sheet
@@ -91,7 +91,7 @@ def process_category_c(priceList1):
 
 def save_to_file(json_data, filename):
 
-    json_filename = curr_dir + "\\json\\" + filename
+    json_filename = curr_dir + "/json/" + filename
 
     with open(json_filename, "w") as outfile:
 
