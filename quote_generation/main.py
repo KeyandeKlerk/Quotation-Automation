@@ -266,7 +266,7 @@ def addToCategoryA(item, quantity_a):
         messagebox.showerror("Invalid Entry", "Please enter a valid quantity")
 
     else:
-        list_data_categoryA = curr_dir + "/json/categoryA.json"
+        list_data_categoryA = curr_dir + "\\json\\categoryA.json"
         fob = open(
             list_data_categoryA,
         )
@@ -297,7 +297,7 @@ def addToCategoryB(item, quantity_b):
         messagebox.showerror("Invalid Entry", "Please enter a valid quantity")
 
     else:
-        list_data_categoryB = curr_dir + "/json/categoryB.json"
+        list_data_categoryB = curr_dir + "\\json\\categoryB.json"
         fob = open(
             list_data_categoryB,
         )
@@ -327,7 +327,7 @@ def addToCategoryC(item, quantity_c):
         messagebox.showerror("Invalid Entry", "Please enter a valid quantity")
 
     else:
-        list_data_categoryC = curr_dir + "/json/categoryC.json"
+        list_data_categoryC = curr_dir + "\\json\\categoryC.json"
         fob = open(
             list_data_categoryC,
         )
@@ -355,7 +355,7 @@ def addToCategoryC(item, quantity_c):
 
 
 def getCategoryA():
-    list_data_categoryA = curr_dir + "/json/categoryA.json"
+    list_data_categoryA = curr_dir + "\\json\\categoryA.json"
     fob = open(
         list_data_categoryA,
     )
@@ -372,7 +372,7 @@ def getCategoryA():
 
 
 def getCategoryB():
-    list_data_categoryB = curr_dir + "/json/categoryB.json"
+    list_data_categoryB = curr_dir + "\\json\\categoryB.json"
     fob = open(
         list_data_categoryB,
     )
@@ -389,7 +389,7 @@ def getCategoryB():
 
 
 def getCategoryC():
-    list_data_categoryC = curr_dir + "/json/categoryC.json"
+    list_data_categoryC = curr_dir + "\\json\\categoryC.json"
     fob = open(
         list_data_categoryC,
     )
