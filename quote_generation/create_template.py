@@ -220,7 +220,7 @@ def create_category_c(json_data, markup):
 def final_totals(quote_name, notes=""):
 
     curr_dir = os.getcwd()
-    filename = curr_dir + "/generated quotes/" + quote_name + ".xlsx"
+    filename = curr_dir + "\\generated quotes\\" + quote_name + ".xlsx"
     current_rows_used = sheet.max_row
 
     append_row(["", "Total Cost Excl. VAT"])
